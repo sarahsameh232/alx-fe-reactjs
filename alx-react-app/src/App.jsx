@@ -16,7 +16,6 @@ function App() {
     <>
       <Header />
       <WelcomeMessage />
-
       <MainContent />
       <div>
         <a href="https://vitejs.dev" target="_blank">
