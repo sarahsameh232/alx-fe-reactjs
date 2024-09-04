@@ -1,10 +1,14 @@
 import React from 'react';
-import FormikForm from './components/formikForm';  // Ensure it has .jsx extension
+import RegistrationForm from './components/RegistrationForm';
+import FormikForm from './components/FormikForm';
 
 function App() {
   return (
-    <div className="App">
-      <h1>User Registration</h1>
+    <div>
+      <h1>Registration Form (Controlled Components)</h1>
+      <RegistrationForm />
+
+      <h1>Registration Form (Formik)</h1>
       <FormikForm />
     </div>
   );
