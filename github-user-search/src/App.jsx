@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { fetchGitHubUser } from './services/githubService';
+import UserCard from './components/UserCard'; // Import the new component
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -20,13 +21,7 @@ function App() {
         placeholder="Enter GitHub username"
       />
       <button onClick={handleSearch}>Search</button>
-      {userData && (
-        <div>
-          <h2>{userData.login}</h2>
-          <img src={userData.avatar_url} alt="avatar" />
-          <a href={userData.html_url}>GitHub Profile</a>
-        </div>
-      )}
+      {userData && <UserCard user={userData} />}  {/* Use the new component */}
     </div>
   );
 }
