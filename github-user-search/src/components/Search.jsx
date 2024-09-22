@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const Search = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');  // Manage search input
-  const [location, setLocation] = useState('');      // Manage location input
-  const [minRepos, setMinRepos] = useState('');      // Manage minimum repos input
-  const [userData, setUserData] = useState(null);    // Store GitHub user data
-  const [loading, setLoading] = useState(false);     // Loading state
-  const [error, setError] = useState('');            // Error state
+  const [searchTerm, setSearchTerm] = useState(""); // Manage search input
+  const [location, setLocation] = useState(""); // Manage location input
+  const [minRepos, setMinRepos] = useState(""); // Manage minimum repos input
+  const [users, setUsers] = useState([]); // Store multiple GitHub user data
+  const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState(""); // Error state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);   // Start loading
-    setError('');       // Clear any previous error
-    setUserData(null);  // Clear any previous user data
+    setLoading(true);
+    setError("");
+    setUsers([]); // Clear previous results
 
     try {
       const data = await onSearch({ searchTerm, location, minRepos }); // Call parent function
-      setUserData(data);  // Set user data on success
+      setUsers(data); // Set users data on success (assuming it's an array)
     } catch (err) {
-      setError('Looks like we cant find the user'); // Set error on failure
+      setError("Looks like we cant find the users"); // Set error on failure
     } finally {
       setLoading(false); // Stop loading
     }
@@ -29,7 +29,9 @@ const Search = ({ onSearch }) => {
       {/* Search form */}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Username</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Username
+          </label>
           <input
             type="text"
             value={searchTerm}
@@ -39,7 +41,9 @@ const Search = ({ onSearch }) => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Location</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Location
+          </label>
           <input
             type="text"
             value={location}
@@ -49,7 +53,9 @@ const Search = ({ onSearch }) => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Min Repositories</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Min Repositories
+          </label>
           <input
             type="number"
             value={minRepos}
@@ -58,22 +64,27 @@ const Search = ({ onSearch }) => {
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
-        <button type="submit" className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg">
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg"
+        >
           Search
         </button>
       </form>
-
-      {/* Conditional rendering: loading, error, and user data */}
-      {loading && <p>Loading...</p>}        {/* Show loading message */}
-      {error && <p>{error}</p>}             {/* Show error message */}
-
-      {userData && (                     
+      {/* Conditional rendering: loading, error, and users data */}
+      {loading && <p>Loading...</p>} {/* Show loading message */}
+      {error && <p>{error}</p>} {/* Show error message */}
+      {users.length > 0 && (
         <div>
-          <h3>{userData.login}</h3>
-          <img src={userData.avatar_url} alt="User Avatar" />
-          <a href={userData.html_url} target="_blank" rel="noopener noreferrer">
-            Visit GitHub Profile
-          </a>
+          {users.map((user) => (
+            <div key={user.id}>
+              <h3>{user.login}</h3>
+              <img src={user.avatar_url} alt="User Avatar" />
+              <a href={user.html_url} target="_blank" rel="noopener noreferrer">
+                Visit GitHub Profile
+              </a>
+            </div>
+          ))}
         </div>
       )}
     </div>
