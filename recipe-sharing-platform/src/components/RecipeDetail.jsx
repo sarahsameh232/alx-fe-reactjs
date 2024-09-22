@@ -30,17 +30,15 @@ export default function RecipeDetail() {
           alt={recipe.title}
           className="w-full h-64 object-cover mb-4 shadow-md rounded-lg"
         />{" "}
-        {/* Added shadow and rounded corners to the image */}
+        {/* Added shadow-md here */}
         <h2 className="text-2xl font-semibold mb-2">Ingredients:</h2>
         <ul className="list-disc pl-6 mb-4">
-          <li>Ingredient 1</li>
-          <li>Ingredient 2</li>
-          <li>Ingredient 3</li>
+          {recipe.ingredients.map((ingredient, index) => (
+            <li key={index}>{ingredient}</li>
+          ))}
         </ul>
         <h2 className="text-2xl font-semibold mb-2">Instructions:</h2>
-        <p className="text-lg leading-relaxed">
-          Step-by-step instructions for preparing the dish go here.
-        </p>
+        <p className="text-lg leading-relaxed">{recipe.instructions}</p>
       </div>
     </div>
   );
