@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { fetchUsers } from "../services/githubService"; // Import the correct function
+import { fetchUserData } from "../services/githubService"; // Import fetchUserData
 
 const Search = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState(""); // Manage search input
@@ -16,7 +16,7 @@ const Search = ({ onSearch }) => {
     setUserData([]); // Clear any previous user data
 
     try {
-      const data = await fetchUsers({ searchTerm, location, minRepos }); // Correct function call
+      const data = await fetchUserData({ searchTerm, location, minRepos }); // Call fetchUserData
       setUserData(data); // Set user data on success
     } catch (err) {
       setError("Looks like we cant find the user"); // Set error on failure

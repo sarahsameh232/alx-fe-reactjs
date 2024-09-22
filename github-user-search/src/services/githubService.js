@@ -8,7 +8,7 @@ const API_BASE_URL = "https://api.github.com/search/users?q";
  * @param {Object} options - Search options containing searchTerm, location, minRepos, and page number
  * @returns {Array} List of GitHub users
  */
-export const fetchUsers = async ({
+export const fetchUserData = async ({
   searchTerm,
   location,
   minRepos,
