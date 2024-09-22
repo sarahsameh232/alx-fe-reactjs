@@ -5,19 +5,19 @@ const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); // Error state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-    setUserData(null);
+    setLoading(true); // Set loading to true
+    setError(""); // Reset error message
+    setUserData(null); // Reset user data
 
     try {
       const data = await fetchUserData(searchTerm); // API call to GitHub
       setUserData(data); // Set user data on success
     } catch (err) {
-      setError("Looks like we can’t find the user"); // Show error if user not found
+      setError("Looks like we can’t find the user"); // Set error message on failure
     } finally {
       setLoading(false); // Stop loading indicator
     }
