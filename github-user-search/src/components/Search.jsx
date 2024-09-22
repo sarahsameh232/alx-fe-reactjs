@@ -1,24 +1,25 @@
 import React, { useState } from "react";
+import { fetchUsers } from "../services/githubService"; // Import the correct function
 
 const Search = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState(""); // Manage search input
   const [location, setLocation] = useState(""); // Manage location input
   const [minRepos, setMinRepos] = useState(""); // Manage minimum repos input
-  const [users, setUsers] = useState([]); // Store multiple GitHub user data
+  const [userData, setUserData] = useState([]); // Store GitHub user data (array of users)
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(""); // Error state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-    setUsers([]); // Clear previous results
+    setLoading(true); // Start loading
+    setError(""); // Clear any previous error
+    setUserData([]); // Clear any previous user data
 
     try {
-      const data = await onSearch({ searchTerm, location, minRepos }); // Call parent function
-      setUsers(data); // Set users data on success (assuming it's an array)
+      const data = await fetchUsers({ searchTerm, location, minRepos }); // Correct function call
+      setUserData(data); // Set user data on success
     } catch (err) {
-      setError("Looks like we cant find the users"); // Set error on failure
+      setError("Looks like we cant find the user"); // Set error on failure
     } finally {
       setLoading(false); // Stop loading
     }
@@ -71,12 +72,12 @@ const Search = ({ onSearch }) => {
           Search
         </button>
       </form>
-      {/* Conditional rendering: loading, error, and users data */}
+      {/* Conditional rendering: loading, error, and user data */}
       {loading && <p>Loading...</p>} {/* Show loading message */}
       {error && <p>{error}</p>} {/* Show error message */}
-      {users.length > 0 && (
+      {userData.length > 0 && (
         <div>
-          {users.map((user) => (
+          {userData.map((user) => (
             <div key={user.id}>
               <h3>{user.login}</h3>
               <img src={user.avatar_url} alt="User Avatar" />
