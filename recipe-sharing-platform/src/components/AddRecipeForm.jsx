@@ -1,51 +1,73 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 export default function AddRecipeForm() {
-  // State to store form input values
-  const [title, setTitle] = useState('');
-  const [ingredients, setIngredients] = useState('');
-  const [steps, setSteps] = useState('');
-  const [error, setError] = useState('');
+  const [title, setTitle] = useState("");
+  const [ingredients, setIngredients] = useState("");
+  const [steps, setSteps] = useState("");
+  const [errors, setErrors] = useState({});
+
+  // Validation function
+  const validate = () => {
+    let tempErrors = {};
+    if (!title) tempErrors.title = "Recipe title is required.";
+    if (!ingredients) {
+      tempErrors.ingredients = "Ingredients are required.";
+    } else {
+      const ingredientsList = ingredients
+        .split("\n")
+        .filter((item) => item.trim());
+      if (ingredientsList.length < 2) {
+        tempErrors.ingredients = "Please list at least two ingredients.";
+      }
+    }
+    if (!steps) tempErrors.steps = "Preparation steps are required.";
+
+    return tempErrors;
+  };
 
   // Form submit handler
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Simple validation
-    if (!title || !ingredients || !steps) {
-      setError('All fields are required.');
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
-    const ingredientsList = ingredients.split('\n').filter(item => item.trim());
-    if (ingredientsList.length < 2) {
-      setError('Please list at least two ingredients.');
-      return;
-    }
+    // If no validation errors, proceed
+    const ingredientsList = ingredients
+      .split("\n")
+      .filter((item) => item.trim());
 
-    setError('');
-
-    // Post form data (to be implemented based on backend logic)
     const recipeData = {
       title,
       ingredients: ingredientsList,
-      steps
+      steps,
     };
 
-    console.log('New Recipe:', recipeData);
-    // Reset form after submission
-    setTitle('');
-    setIngredients('');
-    setSteps('');
+    console.log("New Recipe:", recipeData);
+
+    // Clear the form and errors after successful submission
+    setTitle("");
+    setIngredients("");
+    setSteps("");
+    setErrors({});
   };
 
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Add New Recipe</h1>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-      <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-lg p-6">
+
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-lg rounded-lg p-6"
+      >
+        {/* Title Input */}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="title"
+          >
             Recipe Title
           </label>
           <input
@@ -53,12 +75,22 @@ export default function AddRecipeForm() {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+              errors.title ? "border-red-500" : ""
+            }`}
             placeholder="Enter recipe title"
           />
+          {errors.title && (
+            <p className="text-red-500 text-xs italic">{errors.title}</p>
+          )}
         </div>
+
+        {/* Ingredients Input */}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ingredients">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="ingredients"
+          >
             Ingredients (Enter each ingredient on a new line)
           </label>
           <textarea
@@ -66,12 +98,22 @@ export default function AddRecipeForm() {
             value={ingredients}
             onChange={(e) => setIngredients(e.target.value)}
             rows="4"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+              errors.ingredients ? "border-red-500" : ""
+            }`}
             placeholder="Enter ingredients"
           ></textarea>
+          {errors.ingredients && (
+            <p className="text-red-500 text-xs italic">{errors.ingredients}</p>
+          )}
         </div>
+
+        {/* Preparation Steps Input */}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="steps">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="steps"
+          >
             Preparation Steps
           </label>
           <textarea
@@ -79,10 +121,17 @@ export default function AddRecipeForm() {
             value={steps}
             onChange={(e) => setSteps(e.target.value)}
             rows="4"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+              errors.steps ? "border-red-500" : ""
+            }`}
             placeholder="Enter preparation steps"
           ></textarea>
+          {errors.steps && (
+            <p className="text-red-500 text-xs italic">{errors.steps}</p>
+          )}
         </div>
+
+        {/* Submit Button */}
         <div className="flex items-center justify-between">
           <button
             type="submit"
