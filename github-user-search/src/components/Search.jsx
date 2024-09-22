@@ -14,12 +14,12 @@ const Search = () => {
     setUserData(null);
 
     try {
-      const data = await fetchUserData(searchTerm); // Call the API
-      setUserData(data); // Set user data if found
+      const data = await fetchUserData(searchTerm); // API call to GitHub
+      setUserData(data); // Set user data on success
     } catch (err) {
-      setError("Looks like we can’t find the user"); // Error handling
+      setError("Looks like we can’t find the user"); // Show error if user not found
     } finally {
-      setLoading(false); // Turn off loading
+      setLoading(false); // Stop loading indicator
     }
   };
 
@@ -35,7 +35,7 @@ const Search = () => {
         <button type="submit">Search</button>
       </form>
       {loading && <p>Loading...</p>} {/* Loading state */}
-      {error && <p>{error}</p>} {/* Error state */}
+      {error && <p>{error}</p>} {/* Error message for user not found */}
       {userData && (
         <div>
           <h3>{userData.login}</h3>
