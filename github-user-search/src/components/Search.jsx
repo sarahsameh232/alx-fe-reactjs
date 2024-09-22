@@ -17,7 +17,7 @@ const Search = () => {
       const data = await fetchUserData(searchTerm); // API call to GitHub
       setUserData(data); // Set user data on success
     } catch (err) {
-      setError("Looks like we can’t find the user"); // Set error message on failure
+      setError("Looks like we cant find the user"); // Set error message on failure
     } finally {
       setLoading(false); // Stop loading indicator
     }
