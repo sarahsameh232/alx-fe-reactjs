@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import Search from './components/Search';
-import { fetchUserData } from './services/githubService';
-import UserCard from './components/UserCard';
+import React, { useState } from "react";
+import Search from "./components/Search";
+import { fetchUserData } from "./services/githubService";
+import UserCard from "./components/UserCard";
 
 function App() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleSearch = async (username) => {
     setLoading(true);
-    setError('');
+    setError("");
     setUserData(null);
 
     try {
-      const data = await fetchUserData(username);
+      const data = await fetchUserData(username); // Fetch user data
       setUserData(data);
     } catch (err) {
-      setError('Looks like we can’t find the user');
+      setError("Looks like we can’t find the user");
     } finally {
       setLoading(false);
     }
@@ -26,10 +26,10 @@ function App() {
   return (
     <div className="App">
       <h1>GitHub User Search</h1>
-      <Search onSearch={handleSearch} />
+      <Search onSearch={handleSearch} /> {/* The Search component */}
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
-      {userData && <UserCard user={userData} />}
+      {userData && <UserCard user={userData} />} {/* Display user data */}
     </div>
   );
 }

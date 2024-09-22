@@ -6,7 +6,7 @@ const Search = ({ onSearch }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      onSearch(searchTerm);
+      onSearch(searchTerm); // Pass the input to the parent
     }
   };
 
