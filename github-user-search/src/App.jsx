@@ -1,27 +1,35 @@
 import React, { useState } from 'react';
-import { fetchGitHubUser } from './services/githubService';
-import UserCard from './components/UserCard'; // Import the new component
+import Search from './components/Search';
+import { fetchUserData } from './services/githubService';
+import UserCard from './components/UserCard';
 
 function App() {
   const [userData, setUserData] = useState(null);
-  const [username, setUsername] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSearch = async () => {
-    const data = await fetchGitHubUser(username);
-    setUserData(data);
+  const handleSearch = async (username) => {
+    setLoading(true);
+    setError('');
+    setUserData(null);
+
+    try {
+      const data = await fetchUserData(username);
+      setUserData(data);
+    } catch (err) {
+      setError('Looks like we can’t find the user');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="App">
       <h1>GitHub User Search</h1>
-      <input 
-        type="text" 
-        value={username} 
-        onChange={(e) => setUsername(e.target.value)} 
-        placeholder="Enter GitHub username"
-      />
-      <button onClick={handleSearch}>Search</button>
-      {userData && <UserCard user={userData} />}  {/* Use the new component */}
+      <Search onSearch={handleSearch} />
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
+      {userData && <UserCard user={userData} />}
     </div>
   );
 }
